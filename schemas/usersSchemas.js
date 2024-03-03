@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { PASSWD_REGEX } from "../constants";
+import { PASSWD_REGEX } from "../constants.js";
 
 export const registerUserSchema = Joi.object({
   name: Joi.string().min(1).max(32).required().messages({

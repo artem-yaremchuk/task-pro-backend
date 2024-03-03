@@ -1,23 +1,31 @@
 import { model, Schema } from "mongoose";
 import { compare, genSalt, hash } from "bcrypt";
+import {
+  themeTypes
+} from "../constants.js";
 
 const userSchema = new Schema(
   {
-    password: {
+    name: {
       type: String,
-      required: [true, "Set password for user"],
+      required: [true, "Username is required"],
     },
     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
     },
-    subscription: {
+    password: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      required: [true, "Set password for user"],
+    },
+    theme: {
+      type: String,
+      enum: themeTypes,
+      default: "dark",
     },
     token: String,
+    avatarURL: String,
   },
   { versionKey: false, timestamps: true },
 );
@@ -31,6 +39,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.methods.checkPassword = (candidate, passwordHash) => compare(candidate, passwordHash);
+userSchema.methods.checkPassword = (candidate, passwordHash) =>
+  compare(candidate, passwordHash);
 
 export const User = model("User", userSchema);

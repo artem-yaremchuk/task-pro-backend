@@ -1,27 +1,64 @@
 import { User } from "../models/userModel.js";
-import { signToken } from "../services/jwtService.js";
 import HttpError from "../helpers/HttpError.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-async function signup(userData) {
-  const newUser = await User.create(userData);
+dotenv.config()
 
-  return newUser;
-}
+const { JWT_SECRET } = process.env;
 
-async function login({ email, password }) {
-  const user = await User.findOne({ email });
+export const signup = async (userData) => {
 
-  if (!user) throw HttpError(401, "Email or password is wrong");
+    const { email, password } = userData;
+    const user = await User.findOne({ email });
+    if (user) {
+        throw HttpError(409, "Email in use");
+    }
 
-  const isPasswordValid = await user.checkPassword(password, user.password);
+    const hashPassword = await bcrypt.hash(password, 10);
 
-  if (!isPasswordValid) throw HttpError(401, "Email or password is wrong");
+    const newUser = await User.create({ ...userData, password: hashPassword });
 
-  const token = signToken(user.id);
+    const { _id: id } = newUser;
+    const payload = { id };
+    const token = jwt.sign(payload,JWT_SECRET, { expiresIn: "24h" });
 
-  await User.findByIdAndUpdate(user.id, { token });
+    await User.findByIdAndUpdate(id, { token }, { new: true });
 
-  return { email, token };
-}
+    return { token, user: newUser };
+};
 
-export { signup, login };
+
+
+export const login = async (email, password) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw HttpError(401, "Email or password is wrong");
+    }
+    const passwordCompare = await bcrypt.compare(password, user.password);
+    if (!passwordCompare) {
+        throw HttpError(401, "Email or password is wrong");           
+    }
+    const payload = {
+        id: user._id
+    }
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "24h" });
+
+    await User.findByIdAndUpdate(user._id, { token }, { new: true })
+        .populate("boards", {
+            _id: 1,
+            title: 1,
+            icon: 1,
+            background: 1,
+            updatedAt: 1,
+        });
+
+    return {
+            name: user.name,
+            email: user.email,
+            avatarURL: user.avatarURL,
+            boards: user.boards,
+            theme: user.theme,                       
+    };
+};

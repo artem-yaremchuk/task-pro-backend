@@ -3,6 +3,9 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger.json" with { type: "json" };
+
 
 import authRouter from "./routes/authRouter.js";
 import boardsRouter from "./routes/boardsRouter.js";
@@ -28,6 +31,7 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/users", authRouter);
 app.use("/api/boards", boardsRouter);
 app.use("/api/columns", columnsRouter);

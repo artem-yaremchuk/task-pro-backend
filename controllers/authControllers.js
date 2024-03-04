@@ -73,7 +73,7 @@ export const emailSupport = async (req, res) => {
   const { email, comment } = req.body;
 
   const helpRequest = {
-    to: "taskpro.project@gmail.com",
+    to: "bohdan.ses@gmail.com",
     subject: "User need help.",
     html: `<p> Email: ${email}, Comment: ${comment}</p>`,
   };

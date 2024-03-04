@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { PASSWD_REGEX } from "../constants.js";
+import { PASSWD_REGEX, EMAIL_REGEX } from "../constants.js";
 
 export const registerUserSchema = Joi.object({
   name: Joi.string().min(1).max(32).required().messages({
@@ -38,4 +38,9 @@ export const loginUserSchema = Joi.object({
     "any.required": "Password is required",
     "string.pattern.base": "Invalid password",
   }),
+});
+
+export const helpSchema = Joi.object({
+  email: Joi.string().pattern(EMAIL_REGEX).required(),
+  comment: Joi.string(),
 });

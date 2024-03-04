@@ -3,7 +3,7 @@ import { signup, login } from "../services/usersServices.js";
 import { User } from "../models/userModel.js";
 import sendEmail from "../helpers/sendEmail.js";
 
-export const registerUser = async (req, res, next) => {
+export const registerUser = catchAsync(async (req, res, next) => {
     try {
         const userData = req.body; 
         const { token, user } = await signup(userData);
@@ -21,9 +21,9 @@ export const registerUser = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-};
+});
 
-export const loginUser = async (req, res, next) => {
+export const loginUser = catchAsync(async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await login(email, password);
@@ -31,7 +31,7 @@ export const loginUser = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-};
+});
 
 export const getCurrentUser = async (req, res, next) => {
     try {

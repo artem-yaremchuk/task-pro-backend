@@ -73,7 +73,7 @@ export const emailSupport = async (req, res) => {
   const { email, comment } = req.body;
 
   const helpRequest = {
-    to: "bohdan.ses@gmail.com",
+    to: "taskpro.project@gmail.com",
     subject: "User need help.",
     html: `<p> Email: ${email}, Comment: ${comment}</p>`,
   };
@@ -89,3 +89,17 @@ export const emailSupport = async (req, res) => {
     message: "Reply email has been sent",
   });
 };
+
+export const updateTheme = async (req, res) => {
+    const { _id } = req.user;
+    const { theme } = req.body;
+
+    const result = await User.findByIdAndUpdate(_id, req.body);
+    if (!result) throw HttpError(404);
+  
+    res.json({
+      theme,
+      message: `The theme has been changed.`,
+    });
+  };
+

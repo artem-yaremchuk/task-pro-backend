@@ -18,4 +18,15 @@ async function addColumn(req) {
   return result
 }
 
-export { addColumn }
+async function upColumn(id, req) {
+
+  const result = await Column.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  return result
+}
+
+
+
+export { addColumn, upColumn }

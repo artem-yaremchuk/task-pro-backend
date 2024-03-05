@@ -1,5 +1,10 @@
 import catchAsync from '../helpers/catchAsync.js'
-import { addBoard, getBoard, upBoard, delBoard } from '../services/boardService.js'
+import {
+  addBoard,
+  getBoard,
+  upBoard,
+  delBoard,
+} from '../services/boardService.js'
 import HttpError from '../helpers/HttpError.js'
 import { isDuplicateCreate } from '../helpers/isDuplicateCreate.js'
 import { isDuplicateUpdate } from '../helpers/isDuplicateUpdate.js'

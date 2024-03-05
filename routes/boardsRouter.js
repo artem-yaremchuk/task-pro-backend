@@ -3,7 +3,7 @@ import {
   postAddBoard,
   getOneBoard,
   updateBoard,
-  deleteBoard
+  deleteBoard,
 } from '../controllers/boardsController.js'
 import { validateBody } from '../middlewares/validateBody.js'
 import { isValidId } from '../middlewares/isValidId.js'
@@ -29,6 +29,6 @@ boardsRouter.patch(
   updateBoard
 )
 
-boardsRouter.delete("/:id", authorization, isValidId, deleteBoard);
+boardsRouter.delete('/:id', authorization, isValidId, deleteBoard)
 
 export default boardsRouter

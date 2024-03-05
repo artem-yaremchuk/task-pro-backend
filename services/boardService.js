@@ -70,8 +70,6 @@ async function upBoard(id, req) {
 }
 
 async function delBoard(id, req) {
-  console.log('id :', id)
-  console.log(req.user._id)
   const result = await Board.findByIdAndDelete(id)
 
   await User.updateOne(

@@ -55,6 +55,7 @@ export const login = async (email, password) => {
         });
 
     return {
+            token,
             name: user.name,
             email: user.email,
             avatarURL: user.avatarURL,

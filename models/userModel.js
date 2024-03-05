@@ -21,13 +21,19 @@ const userSchema = new Schema({
       type: String,
       default: "",
     },
-    boards: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "board",
-        default: [],
-      },
-    ],
+    boards: {
+      type: [
+        {
+          boardsId: {
+            type: Schema.Types.ObjectId,
+            ref: "board",
+          },
+          title: String,
+          icon: String
+        },
+      ],
+      default: [],
+    },
     theme: {
       type: String,
       enum: themeTypes,

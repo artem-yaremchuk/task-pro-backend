@@ -1,6 +1,7 @@
 import catchAsync from "../helpers/catchAsync.js";
 import { signup, login } from "../services/usersServices.js";
 import { User } from "../models/userModel.js";
+
 import sendEmail from "../helpers/sendEmail.js";
 
 export const registerUser = catchAsync(async (req, res, next) => {
@@ -36,22 +37,22 @@ export const loginUser = catchAsync(async (req, res, next) => {
 export const getCurrentUser = async (req, res, next) => {
   try {
     const { _id, name, email, avatarURL, boards, theme } = req.user;
-
+ 
     await User.findById(_id, { new: true })
       .populate("boards", {
-        _id: 1,
+        _id: 1,       
         title: 1,
         icon: 1,
         background: 1,
         updatedAt: 1,
       })
-      .then((user) => {
+      .then((user) => {      
         res.status(201).json({
           user: {
             name,
             email,
             avatarURL,
-            boards,
+            boards ,         
             theme,
           },
         });

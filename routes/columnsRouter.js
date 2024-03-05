@@ -1,7 +1,19 @@
-import express from "express";
+import express from 'express'
 
-const columnsRouter = express.Router();
+import { postColumn } from '../controllers/columnsController.js'
+import { columnSchema } from '../schemas/columnSchemas.js'
+import { validateBody } from '../middlewares/validateBody.js'
+import { authorization } from '../middlewares/authMiddleware.js'
+// import { isValidId } from '../middlewares/isValidId.js'
 
-columnsRouter.post("/" );
 
-export default columnsRouter;
+const columnsRouter = express.Router()
+
+columnsRouter.post(
+  '/',
+  authorization,
+  validateBody(columnSchema, `missing fields`),
+  postColumn
+)
+
+export default columnsRouter

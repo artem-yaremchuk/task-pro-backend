@@ -17,11 +17,11 @@ const boardSchema = new Schema(
       enum: backgroundTypes,
       default: "00",
     },
-    // user: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",
-    //   required: true,
-    // },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
     columns: [
       {
         type: Schema.Types.ObjectId,

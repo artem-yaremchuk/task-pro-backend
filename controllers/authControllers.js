@@ -4,62 +4,62 @@ import { User } from "../models/userModel.js";
 import sendEmail from "../helpers/sendEmail.js";
 
 export const registerUser = catchAsync(async (req, res, next) => {
-    try {
-        const userData = req.body; 
-        const { token, user } = await signup(userData);
+  try {
+    const userData = req.body;
+    const { token, user } = await signup(userData);
 
-      res.status(201).json({
-            token,
-            user: {
-                name: user.name,
-                email: user.email,
-                avatarURL: user.avatarURL,
-                boards: user.boards,
-                theme: user.theme,
-            }
-      });
-    } catch (error) {
-        next(error);
-    }
+    res.status(201).json({
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+        avatarURL: user.avatarURL,
+        boards: user.boards,
+        theme: user.theme,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export const loginUser = catchAsync(async (req, res, next) => {
-    try {
-        const { email, password } = req.body;
-        const user = await login(email, password);
-        res.status(201).json({ user });
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const { email, password } = req.body;
+    const user = await login(email, password);
+    res.status(201).json({ user });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export const getCurrentUser = async (req, res, next) => {
-    try {
-        const { _id, name, email, avatarURL, boards, theme } = req.user;
-        
-        await User.findById(_id, { new: true })
-            .populate("boards", {
-                _id: 1,
-                title: 1,
-                icon: 1,
-                background: 1,
-                updatedAt: 1,
-            })
-            .then((user) => {
-                res.status(201).json({
-                    user: {
-                    name,
-                    email,
-                    avatarURL,
-                    boards,
-                    theme,                   
-                }
-            })            
-        })
-    } catch (error) {
-        next(error)
-    }
-}
+  try {
+    const { _id, name, email, avatarURL, boards, theme } = req.user;
+
+    await User.findById(_id, { new: true })
+      .populate("boards", {
+        _id: 1,
+        title: 1,
+        icon: 1,
+        background: 1,
+        updatedAt: 1,
+      })
+      .then((user) => {
+        res.status(201).json({
+          user: {
+            name,
+            email,
+            avatarURL,
+            boards,
+            theme,
+          },
+        });
+      });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const logoutUser = catchAsync(async (req, res) => {
   const { _id } = req.user;
@@ -69,11 +69,11 @@ export const logoutUser = catchAsync(async (req, res) => {
   res.status(204).send();
 });
 
-export const emailSupport = async (req, res) => {
+export const emailSupport = catchAsync(async (req, res) => {
   const { email, comment } = req.body;
 
   const helpRequest = {
-    to: "bohdan.ses@gmail.com",
+    to: "taskpro.project@gmail.com",
     subject: "User need help.",
     html: `<p> Email: ${email}, Comment: ${comment}</p>`,
   };
@@ -88,4 +88,19 @@ export const emailSupport = async (req, res) => {
   res.json({
     message: "Reply email has been sent",
   });
-};
+});
+
+export const updateTheme = catchAsync(async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { theme } = req.body;
+
+    await User.findByIdAndUpdate(_id, req.body);
+    res.json({
+      theme,
+      message: `The theme has been changed.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+});

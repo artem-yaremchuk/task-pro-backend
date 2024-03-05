@@ -44,3 +44,7 @@ export const helpSchema = Joi.object({
   email: Joi.string().pattern(EMAIL_REGEX).required(),
   comment: Joi.string(),
 });
+
+export const themeSchema = Joi.object({
+  theme: Joi.string().valid("light", "dark", "violet").required(),
+});

@@ -2,10 +2,9 @@ import { Column } from '../models/columnModel.js'
 import { Board } from '../models/boardModel.js'
 
 async function addColumn(req) {
-  const { _id: user } = req.user;
-  const { board: boardId } = req.body;
-  const result = await Column.create({ ...req.body, user  })
-
+  const { _id: user } = req.user
+  const { board: boardId } = req.body
+  const result = await Column.create({ ...req.body, user })
 
   await Board.findByIdAndUpdate(
     boardId,
@@ -13,20 +12,31 @@ async function addColumn(req) {
       $push: { columns: result._id },
     },
     { new: true }
-  );
+  )
 
   return result
 }
 
 async function upColumn(id, req) {
-
-  const result = await Column.findByIdAndUpdate(id, req.body, { new: true });
+  const result = await Column.findByIdAndUpdate(id, req.body, { new: true })
   if (!result) {
-    throw HttpError(404, `Not found`);
+    throw HttpError(404, `Not found`)
   }
   return result
 }
 
+async function delColumn(id) {
+  const result = await Column.findByIdAndDelete(id)
 
+  await Board.findByIdAndUpdate(
+    result.board,
+    {
+      $pull: { columns: result._id },
+    },
+    { new: true }
+  )
 
-export { addColumn, upColumn }
+  return result
+}
+
+export { addColumn, upColumn, delColumn }

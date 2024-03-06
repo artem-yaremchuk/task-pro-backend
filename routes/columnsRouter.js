@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { postColumn,updateColumn } from '../controllers/columnsController.js'
+import { postColumn,updateColumn,deleteColumn } from '../controllers/columnsController.js'
 import { columnSchema } from '../schemas/columnSchemas.js'
 import { validateBody } from '../middlewares/validateBody.js'
 import { authorization } from '../middlewares/authMiddleware.js'
@@ -23,5 +23,7 @@ columnsRouter.patch(
   validateBody(columnSchema, `missing fields`),
   updateColumn
 )
+
+columnsRouter.delete("/:id", authorization, isValidId, deleteColumn);
 
 export default columnsRouter

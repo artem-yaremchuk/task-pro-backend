@@ -1,5 +1,5 @@
 import catchAsync from '../helpers/catchAsync.js'
-import { addColumn, upColumn } from '../services/columnService.js'
+import { addColumn, upColumn, delColumn } from '../services/columnService.js'
 import HttpError from '../helpers/HttpError.js'
 import { isDuplicateCreate } from '../helpers/isDuplicateCreate.js'
 import { isDuplicateUpdate } from '../helpers/isDuplicateUpdate.js'
@@ -38,9 +38,26 @@ export const updateColumn = catchAsync(async (req, res) => {
     throw HttpError(409, `Column ${req.body.title} already exist`)
   }
 
-  
   const result = await upColumn(id, req)
 
   const { _id, title, updatedAt, board } = result
   res.status(200).json({ _id, title, updatedAt, board })
+})
+
+export const deleteColumn = catchAsync(async (req, res) => {
+  const { _id: user } = req.user
+  const { id } = req.params
+
+  const checkColumnId = await Column.findById(id)
+  if (!checkColumnId || checkColumnId.user.toString() !== user.toString()) {
+    throw HttpError(404)
+  }
+
+  const result = await delColumn(id)
+
+  if (!result) {
+    throw HttpError(404)
+  }
+
+  res.status(200).json({ id, message: 'Column deleted' })
 })

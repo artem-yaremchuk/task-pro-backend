@@ -7,8 +7,8 @@
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
   "servers": [
-    { "url": "http://localhost:3000" },
-    { "url": "https://project-team-6-backend.onrender.com" }
+    { "url": "http://localhost:3001/api" },
+    { "url": "https://project-team-6-backend.onrender.com/api" }
   ],
   "tags": [
     {

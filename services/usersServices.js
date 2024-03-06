@@ -29,8 +29,6 @@ export const signup = async (userData) => {
     return { token, user: newUser };
 };
 
-
-
 export const login = async (email, password) => {
     const user = await User.findOne({ email });
     if (!user) {

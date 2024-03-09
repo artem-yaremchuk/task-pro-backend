@@ -20,6 +20,8 @@ export const registerUser = catchAsync(async (req, res) => {
     });
 });
 
+
+
 export const loginUser = catchAsync(async (req, res) => {
     const { email, password } = req.body;
     const user = await login(email, password);

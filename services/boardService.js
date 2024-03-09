@@ -1,6 +1,7 @@
 import { Board } from '../models/boardModel.js'
 import { User } from '../models/userModel.js'
 import { Column } from '../models/columnModel.js'
+import { Task } from '../models/taskModel.js'
 
 async function addBoard(req, user) {
   const result = await Board.create({ ...req.body, user })
@@ -8,7 +9,6 @@ async function addBoard(req, user) {
   await User.findByIdAndUpdate(
     user._id,
     {
-      // $push: { boards: result._id},
       $push: {
         boards: { _id: result._id, title: result.title, icon: result.icon },
       },
@@ -19,26 +19,25 @@ async function addBoard(req, user) {
 }
 
 async function getBoard(id) {
-  // const result = await Board.findById(id)
   const result = await Board.findById(id).populate({
     path: 'columns',
     select: {
       _id: 1,
       updatedAt: 1,
       title: 1,
-      //tasks: 1,
+      tasks: 1,
     },
-    // populate: {
-    //   path: "tasks",
-    //   select: {
-    //     _id: 1,
-    //     updatedAt: 1,
-    //     title: 1,
-    //     description: 1,
-    //     priority: 1,
-    //     deadline: 1,
-    //   },
-    // },
+    populate: {
+      path: 'tasks',
+      select: {
+        _id: 1,
+        updatedAt: 1,
+        title: 1,
+        description: 1,
+        priority: 1,
+        deadline: 1,
+      },
+    },
   })
   return result
 }
@@ -79,7 +78,7 @@ async function delBoard(id, req) {
     { $pull: { boards: { _id: id } } }
   )
   await Column.deleteMany({ board: id })
-
+  await Task.deleteMany({ board: id })
   return result
 }
 

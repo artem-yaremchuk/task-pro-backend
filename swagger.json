@@ -559,7 +559,7 @@
           }
         }
       },
-      "patch": {
+      "patch/{id}": {
         "tags": ["Boards"],
         "summary": "Edit board's info by board's ID",
         "parameters": [
@@ -640,7 +640,7 @@
           }
         }
       },
-      "delete": {
+      "delete/{id}": {
         "tags": ["Boards"],
         "summary": "Delete board by board's ID",
         "parameters": [
@@ -1127,7 +1127,7 @@
       }
     },
     "/api/tasks/{id}/replace": {
-      "patch": {
+      "post": {
         "tags": ["Tasks"],
         "summary": "Replace task to another column by task's ID",
         "parameters": [

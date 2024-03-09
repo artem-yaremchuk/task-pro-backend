@@ -3,15 +3,17 @@ import HttpError from '../helpers/HttpError.js'
 import { addTask, delTask, upTask, moveTask } from '../services/taskService.js'
 
 export const postTask = catchAsync(async (req, res) => {
+  const  {column} = req.body
+  const columnId = column
   const result = await addTask(req)
   if (!result) {
     throw HttpError(404)
   }
 
-  const { _id, title, description, priority, deadline, updatedAt } = result
+  const { _id, title, description, priority, deadline, updatedAt} = result
   res
     .status(201)
-    .json({ _id, title, description, priority, deadline, updatedAt })
+    .json({ _id, title, description, priority, deadline, updatedAt,columnId })
 })
 
 export const deleteTask = catchAsync(async (req, res) => {
@@ -44,3 +46,4 @@ export const replaceTask = catchAsync(async (req, res) => {
 
   res.status(200).json({ message: 'Task replaced' })
 })
+

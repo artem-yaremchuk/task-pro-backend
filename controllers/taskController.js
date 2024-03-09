@@ -14,6 +14,7 @@ export const postTask = catchAsync(async (req, res) => {
     .json({ _id, title, description, priority, deadline, updatedAt })
 })
 
+
 export const deleteTask = catchAsync(async (req, res) => {
   const { id } = req.params
   const result = await delTask(req)

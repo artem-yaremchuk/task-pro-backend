@@ -1,4 +1,4 @@
-export const themeTypes = ['light', 'violet', 'dark'];
+export const themeTypes = ["light", "violet", "dark"];
 
 export const iconTypes = [
   'mark-circuls-18',

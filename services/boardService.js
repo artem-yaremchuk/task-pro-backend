@@ -74,6 +74,7 @@ async function delBoard(id, req) {
   await Task.deleteMany({
     column: { $in: columns.map((column) => column._id) },
   })
+
   const result = await Board.findByIdAndDelete(id)
 
   await User.updateOne(

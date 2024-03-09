@@ -38,4 +38,23 @@ async function delTask(req) {
 
   return result
 }
-export { addTask, delTask }
+
+async function upTask(req) {
+  const { _id: user } = req.user
+  const { id } = req.params
+
+  const task = await Task.findById(id)
+
+  if (!task || task.user.toString() !== user.toString()) {
+    return null
+  }
+
+  const result = await Task.findByIdAndUpdate(id, req.body, { new: true })
+  if (!result) {
+    return null
+  }
+
+  return result
+}
+
+export { addTask, delTask, upTask }

@@ -4,10 +4,8 @@ import { Task } from '../models/taskModel.js'
 async function addTask(req) {
   const { _id: user } = req.user
   const { column } = req.body
-  const existingColumn = await Column.findById(column)
-  if (!existingColumn) {
-    return existingColumn
-  }
+  const checkColumn = await Column.findById(column)
+  if (!checkColumn) return null
 
   const result = await Task.create({ ...req.body, user })
 
@@ -28,9 +26,7 @@ async function delTask(req) {
 
   const task = await Task.findById(id)
 
-  if (!task || task.user.toString() !== user.toString()) {
-    return null
-  }
+  if (!task || task.user.toString() !== user.toString()) return null
 
   await Column.updateOne({ _id: task.column }, { $pull: { tasks: id } })
 
@@ -45,16 +41,36 @@ async function upTask(req) {
 
   const task = await Task.findById(id)
 
-  if (!task || task.user.toString() !== user.toString()) {
-    return null
-  }
+  if (!task || task.user.toString() !== user.toString()) return null
 
   const result = await Task.findByIdAndUpdate(id, req.body, { new: true })
-  if (!result) {
-    return null
-  }
+  if (!result) return null
 
   return result
 }
 
-export { addTask, delTask, upTask }
+async function moveTask(req) {
+  const { id } = req.params;
+  const { column: toColumnId } = req.body;
+
+  const task = await Task.findById(id);
+  if (!task) return null;
+
+  const toColumn = await Column.findById(toColumnId);
+  if (!toColumn) return null;
+
+  const fromColumn = await Column.findOne({ tasks: id });
+  if (!fromColumn) return null;
+
+  fromColumn.tasks.pull(id);
+  await fromColumn.save();
+
+  task.column = toColumnId;
+  await task.save();
+
+  toColumn.tasks.push(task._id);
+  await toColumn.save();
+
+  return true;
+}
+export { addTask, delTask, upTask, moveTask }

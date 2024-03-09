@@ -1,6 +1,6 @@
 import catchAsync from '../helpers/catchAsync.js'
 import HttpError from '../helpers/HttpError.js'
-import { addTask, delTask, upTask } from '../services/taskService.js'
+import { addTask, delTask, upTask, moveTask } from '../services/taskService.js'
 
 export const postTask = catchAsync(async (req, res) => {
   const result = await addTask(req)
@@ -24,7 +24,7 @@ export const deleteTask = catchAsync(async (req, res) => {
   res.status(200).json({ _id: id, message: 'Task deleted' })
 })
 
-export const updateTask = async (req, res) => {
+export const updateTask = catchAsync(async (req, res) => {
   const result = await upTask(req)
   if (!result) {
     throw HttpError(404)
@@ -34,4 +34,13 @@ export const updateTask = async (req, res) => {
   res
     .status(200)
     .json({ _id, title, description, priority, deadline, updatedAt })
-}
+})
+
+export const replaceTask = catchAsync(async (req, res) => {
+  const result = await moveTask(req)
+  if (!result) {
+    throw HttpError(404)
+  }
+
+  res.status(200).json({ message: 'Task replaced' })
+})

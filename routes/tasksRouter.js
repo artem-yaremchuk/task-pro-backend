@@ -3,7 +3,8 @@ import { authorization } from '../middlewares/authMiddleware.js'
 import { validateBody } from '../middlewares/validateBody.js'
 import { isValidId } from '../middlewares/isValidId.js'
 import { addTaskSchema } from '../schemas/addTaskSchema.js'
-import { postTask, deleteTask} from '../controllers/taskController.js'
+import { upTaskSchema } from '../schemas/upTaskSchema.js'
+import { postTask, deleteTask,updateTask} from '../controllers/taskController.js'
 const tasksRouter = express.Router();
 
 tasksRouter.post(
@@ -14,5 +15,13 @@ tasksRouter.post(
  );
 
  tasksRouter.delete("/:id", authorization, isValidId, deleteTask);
+
+ tasksRouter.patch(
+    "/:id",
+    authorization,
+    isValidId,
+    validateBody(upTaskSchema, `missing fields`),
+    updateTask
+  );
 
 export default tasksRouter;

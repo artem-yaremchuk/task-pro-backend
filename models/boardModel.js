@@ -10,7 +10,7 @@ const boardSchema = new Schema(
     icon: {
       type: String,
       enum: iconTypes,
-      default: 'marc-circuls-18',
+      default: 'mark-circuls-18',
     },
     background: {
       type: String,

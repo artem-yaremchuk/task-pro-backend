@@ -69,6 +69,11 @@ async function upBoard(id, req) {
 }
 
 async function delBoard(id, req) {
+  const columns = await Column.find({ board: id })
+
+  await Task.deleteMany({
+    column: { $in: columns.map((column) => column._id) },
+  })
   const result = await Board.findByIdAndDelete(id)
 
   await User.updateOne(
@@ -78,7 +83,7 @@ async function delBoard(id, req) {
     { $pull: { boards: { _id: id } } }
   )
   await Column.deleteMany({ board: id })
-  await Task.deleteMany({ board: id })
+
   return result
 }
 

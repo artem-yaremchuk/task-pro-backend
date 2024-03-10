@@ -4,7 +4,6 @@ import { validateBody } from "../middlewares/validateBody.js";
 import { helpSchema } from "../schemas/usersSchemas.js";
 import { authorization } from "../middlewares/authMiddleware.js";
 
-
 const helpRouter = express.Router();
 
 helpRouter.post("/", authorization, validateBody(helpSchema), emailSupport);

@@ -7,8 +7,8 @@
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
   "servers": [
-    { "url": "http://localhost:3000" },
-    { "url": "https://project-team-6-backend.onrender.com" }
+    { "url": "http://localhost:3001/api" },
+    { "url": "https://project-team-6-backend.onrender.com/api" }
   ],
   "tags": [
     {
@@ -559,7 +559,7 @@
           }
         }
       },
-      "patch": {
+      "patch/{id}": {
         "tags": ["Boards"],
         "summary": "Edit board's info by board's ID",
         "parameters": [
@@ -640,7 +640,7 @@
           }
         }
       },
-      "delete": {
+      "delete/{id}": {
         "tags": ["Boards"],
         "summary": "Delete board by board's ID",
         "parameters": [
@@ -939,7 +939,7 @@
         "summary": "Add task",
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Task object",
+          "description": "Owner Columns id",
           "required": true,
 
           "content": {
@@ -1127,7 +1127,7 @@
       }
     },
     "/api/tasks/{id}/replace": {
-      "patch": {
+      "post": {
         "tags": ["Tasks"],
         "summary": "Replace task to another column by task's ID",
         "parameters": [

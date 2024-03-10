@@ -4,8 +4,7 @@ import { User } from "../models/userModel.js";
 
 import sendEmail from "../helpers/sendEmail.js";
 
-export const registerUser = catchAsync(async (req, res, next) => {
-  try {
+export const registerUser = catchAsync(async (req, res) => {
     const userData = req.body;
     const { token, user } = await signup(userData);
 
@@ -19,23 +18,17 @@ export const registerUser = catchAsync(async (req, res, next) => {
         theme: user.theme,
       },
     });
-  } catch (error) {
-    next(error);
-  }
 });
 
-export const loginUser = catchAsync(async (req, res, next) => {
-  try {
+
+
+export const loginUser = catchAsync(async (req, res) => {
     const { email, password } = req.body;
     const user = await login(email, password);
     res.status(201).json({ user });
-  } catch (error) {
-    next(error);
-  }
 });
 
-export const getCurrentUser = async (req, res, next) => {
-  try {
+export const getCurrentUser = async (req, res) => {
     const { _id, name, email, avatarURL, boards, theme } = req.user;
  
     await User.findById(_id, { new: true })
@@ -57,9 +50,6 @@ export const getCurrentUser = async (req, res, next) => {
           },
         });
       });
-  } catch (error) {
-    next(error);
-  }
 };
 
 export const logoutUser = catchAsync(async (req, res) => {

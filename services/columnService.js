@@ -26,6 +26,9 @@ async function upColumn(id, req) {
 }
 
 async function delColumn(id) {
+
+  await Task.deleteMany({ column: id })
+
   const result = await Column.findByIdAndDelete(id)
 
   await Board.findByIdAndUpdate(

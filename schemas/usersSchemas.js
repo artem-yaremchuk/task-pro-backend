@@ -48,3 +48,10 @@ export const helpSchema = Joi.object({
 export const themeSchema = Joi.object({
   theme: Joi.string().valid("light", "dark", "violet").required(),
 });
+
+export const updateSchema = Joi.object({
+  name:Joi.string().min(4).max(10),
+  password: Joi.string().min(4).max(10),
+  email: Joi.string().email().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+  avatar: Joi.any()
+});

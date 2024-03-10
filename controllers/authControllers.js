@@ -1,5 +1,5 @@
 import catchAsync from "../helpers/catchAsync.js";
-import { signup, login } from "../services/usersServices.js";
+import { signup, login, updateUserProfile } from "../services/usersServices.js";
 import { User } from "../models/userModel.js";
 
 import sendEmail from "../helpers/sendEmail.js";
@@ -104,4 +104,15 @@ export const updateTheme = catchAsync(async (req, res) => {
   } catch (error) {
     next(error);
   }
+});
+
+export const updateUser = catchAsync(async (req, res) => {
+  const {_id} = req.user;
+  console.log(_id)
+  const updatedUser = await updateUserProfile(_id, req.body, req.file);
+
+  res.json({
+            message: "Profile updated",
+            user: updatedUser
+  })
 });

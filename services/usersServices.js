@@ -3,6 +3,7 @@ import HttpError from "../helpers/HttpError.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import cloudinary from "../helpers/cloudinary.js";
 
 dotenv.config()
 
@@ -28,8 +29,6 @@ export const signup = async (userData) => {
 
     return { token, user: newUser };
 };
-
-
 
 export const login = async (email, password) => {
     const user = await User.findOne({ email });
@@ -63,3 +62,34 @@ export const login = async (email, password) => {
             theme: user.theme,                       
     };
 };
+
+export const updateUserProfile = async(userId, reqBody, file) => {
+    const user = await User.findOne({_id: userId});
+    if (!user) {
+        throw HttpError(404)
+    };
+
+    let hashPassword;
+    if (reqBody.password) {
+        hashPassword = await bcrypt.hash(reqBody.password, 10);
+    }
+
+    let avatarURL = '';
+    if (file) {
+        const uploadedImage = await cloudinary.uploader.upload(file.path, {allowed_formats: ["jpg", "png"]});
+        console.log(uploadedImage)
+        avatarURL = uploadedImage.url;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {...reqBody, password: hashPassword, avatarURL: avatarURL},
+        {new: true}
+    );
+
+    if (!updatedUser) {
+        throw HttpError(404)
+    }
+
+    return updatedUser;
+}

@@ -159,10 +159,26 @@
         "summary": "User logout",
         "security": [{ "Bearer": [] }],
         "responses": {
-          "204": {
-            "description": "Successful operation",
-            "content": {}
+
+
+
+
+           "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseLogout204"
+                }
+              }
+            }
           },
+
+
+
+
+
+
           "401": {
             "description": "Unauthorized (login information is wrong)",
             "content": {
@@ -718,7 +734,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -1467,6 +1483,12 @@
           "message": "Email or password is wrong"
         }
       },
+
+      "ResponseLogout204": {
+        "type": "object",
+        "properties": {
+        }
+      },
       "CurrentUserResponse": {
         "type": "object",
         "properties": {
@@ -2020,7 +2042,7 @@
           }
         }
       },
-      "AddColunmResponse": {
+      "AddColumnResponse": {
         "type": "object",
         "properties": {
           "_id": {

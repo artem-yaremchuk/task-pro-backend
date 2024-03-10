@@ -5,51 +5,49 @@ import { User } from "../models/userModel.js";
 import sendEmail from "../helpers/sendEmail.js";
 
 export const registerUser = catchAsync(async (req, res) => {
-    const userData = req.body;
-    const { token, user } = await signup(userData);
+  const userData = req.body;
+  const { token, user } = await signup(userData);
 
-    res.status(201).json({
-      token,
-      user: {
-        name: user.name,
-        email: user.email,
-        avatarURL: user.avatarURL,
-        boards: user.boards,
-        theme: user.theme,
-      },
-    });
+  res.status(201).json({
+    token,
+    user: {
+      name: user.name,
+      email: user.email,
+      avatarURL: user.avatarURL,
+      boards: user.boards,
+      theme: user.theme,
+    },
+  });
 });
 
-
-
 export const loginUser = catchAsync(async (req, res) => {
-    const { email, password } = req.body;
-    const user = await login(email, password);
-    res.status(201).json({ user });
+  const { email, password } = req.body;
+  const user = await login(email, password);
+  res.status(201).json({ user });
 });
 
 export const getCurrentUser = async (req, res) => {
-    const { _id, name, email, avatarURL, boards, theme } = req.user;
- 
-    await User.findById(_id, { new: true })
-      .populate("boards", {
-        _id: 1,       
-        title: 1,
-        icon: 1,
-        background: 1,
-        updatedAt: 1,
-      })
-      .then((user) => {      
-        res.status(201).json({
-          user: {
-            name,
-            email,
-            avatarURL,
-            boards ,         
-            theme,
-          },
-        });
+  const { _id, name, email, avatarURL, boards, theme } = req.user;
+
+  await User.findById(_id, { new: true })
+    .populate("boards", {
+      _id: 1,
+      title: 1,
+      icon: 1,
+      background: 1,
+      updatedAt: 1,
+    })
+    .then((user) => {
+      res.status(201).json({
+        user: {
+          name,
+          email,
+          avatarURL,
+          boards,
+          theme,
+        },
       });
+    });
 };
 
 export const logoutUser = catchAsync(async (req, res) => {
@@ -97,12 +95,12 @@ export const updateTheme = catchAsync(async (req, res) => {
 });
 
 export const updateUser = catchAsync(async (req, res) => {
-  const {_id} = req.user;
-  console.log(_id)
+  const { _id } = req.user;
+  console.log(_id);
   const updatedUser = await updateUserProfile(_id, req.body, req.file);
 
   res.json({
-            message: "Profile updated",
-            user: updatedUser
-  })
+    message: "Profile updated",
+    user: updatedUser,
+  });
 });

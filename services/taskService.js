@@ -1,52 +1,52 @@
-import { Column } from '../models/columnModel.js'
-import { Task } from '../models/taskModel.js'
+import { Column } from "../models/columnModel.js";
+import { Task } from "../models/taskModel.js";
 
 async function addTask(req) {
-  const { _id: user } = req.user
-  const { column } = req.body
-  const checkColumn = await Column.findById(column)
-  if (!checkColumn) return null
+  const { _id: user } = req.user;
+  const { column } = req.body;
+  const checkColumn = await Column.findById(column);
+  if (!checkColumn) return null;
 
-  const result = await Task.create({ ...req.body, user })
+  const result = await Task.create({ ...req.body, user });
 
   await Column.findByIdAndUpdate(
     column,
     {
       $push: { tasks: result._id },
     },
-    { new: true }
-  )
+    { new: true },
+  );
 
-  return result
+  return result;
 }
 
 async function delTask(req) {
-  const { _id: user } = req.user
-  const { id } = req.params
+  const { _id: user } = req.user;
+  const { id } = req.params;
 
-  const task = await Task.findById(id)
+  const task = await Task.findById(id);
 
-  if (!task || task.user.toString() !== user.toString()) return null
+  if (!task || task.user.toString() !== user.toString()) return null;
 
-  await Column.updateOne({ _id: task.column }, { $pull: { tasks: id } })
+  await Column.updateOne({ _id: task.column }, { $pull: { tasks: id } });
 
-  const result = await Task.findByIdAndDelete(id)
+  const result = await Task.findByIdAndDelete(id);
 
-  return result
+  return result;
 }
 
 async function upTask(req) {
-  const { _id: user } = req.user
-  const { id } = req.params
+  const { _id: user } = req.user;
+  const { id } = req.params;
 
-  const task = await Task.findById(id)
+  const task = await Task.findById(id);
 
-  if (!task || task.user.toString() !== user.toString()) return null
+  if (!task || task.user.toString() !== user.toString()) return null;
 
-  const result = await Task.findByIdAndUpdate(id, req.body, { new: true })
-  if (!result) return null
+  const result = await Task.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) return null;
 
-  return result
+  return result;
 }
 
 async function moveTask(req) {
@@ -73,4 +73,4 @@ async function moveTask(req) {
 
   return true;
 }
-export { addTask, delTask, upTask, moveTask }
+export { addTask, delTask, upTask, moveTask };

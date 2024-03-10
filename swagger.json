@@ -939,7 +939,7 @@
         "summary": "Add task",
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Task object",
+          "description": "Owner Columns id",
           "required": true,
 
           "content": {

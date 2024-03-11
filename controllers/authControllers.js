@@ -96,7 +96,7 @@ export const updateTheme = catchAsync(async (req, res) => {
 
 export const updateUser = catchAsync(async (req, res) => {
   const { _id } = req.user;
-  console.log(_id);
+ 
   const updatedUser = await updateUserProfile(_id, req.body, req.file);
 
   res.json({

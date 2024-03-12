@@ -75,7 +75,7 @@ export const updateUserProfile = async (userId, reqBody, file) => {
     hashPassword = await bcrypt.hash(reqBody.password, 10);
   }
 
-  let avatarURL = "";
+  let avatarURL;
   if (file) {
     const uploadedImage = await cloudinary.uploader.upload(file.path, {
       allowed_formats: ["jpg", "png"],

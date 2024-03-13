@@ -189,7 +189,7 @@
       }
     },
     "/users/current": {
-      "post": {
+      "get": {
         "tags": ["Auth and users"],
         "summary": "Refresh user",
         "parameters": [],
@@ -305,7 +305,7 @@
         }
       }
     },
-    "/api/help": {
+    "/help": {
       "post": {
         "tags": ["Help"],
         "summary": "Send help mail",
@@ -402,7 +402,7 @@
         }
       }
     },
-    "/api/boards/{:id}": {
+    "/boards/{id}": {
       "get": {
         "tags": ["Boards"],
         "summary": "Get board's info by board's ID",
@@ -447,80 +447,7 @@
             "content": {}
           }
         }
-      }
-    },
-    "/api/boards": {
-      "post": {
-        "tags": ["Boards"],
-        "summary": "Add board",
-        "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Board object",
-          "required": true,
-
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddBoardRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddBoardResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (missing required field)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddResponse400"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response401"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found (requested resource could not be found)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Response404"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict (user with stated email is already exist)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddBoardResponse409"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/boards/:id": {
+      },
       "patch": {
         "tags": ["Boards"],
         "summary": "Edit board's info by board's ID",
@@ -601,9 +528,7 @@
             }
           }
         }
-      }
-    },
-    "/api/boards/{id}": {
+      },
       "delete": {
         "tags": ["Boards"],
         "summary": "Delete board by board's ID",
@@ -664,7 +589,78 @@
         }
       }
     },
-    "/api/columns": {
+    "/boards": {
+      "post": {
+        "tags": ["Boards"],
+        "summary": "Add board",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Board object",
+          "required": true,
+
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBoardRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddBoardResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (missing required field)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddResponse400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response401"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (requested resource could not be found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response404"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict (user with stated email is already exist)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddBoardResponse409"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/columns": {
       "post": {
         "tags": ["Columns"],
         "summary": "Column id",
@@ -750,7 +746,7 @@
         }
       }
     },
-    "/api/columns/id/": {
+    "/columns/{id}/": {
       "patch": {
         "tags": ["Columns"],
         "summary": "Column id",
@@ -834,9 +830,7 @@
             }
           }
         }
-      }
-    },
-    "/api/columns/:id": {
+      },
       "delete": {
         "tags": ["Columns"],
         "summary": "Column id",
@@ -902,7 +896,7 @@
         }
       }
     },
-    "/api/tasks": {
+    "/tasks": {
       "post": {
         "tags": ["Tasks"],
         "summary": "Add task",
@@ -938,7 +932,7 @@
         }
       }
     },
-    "/api/tasks/:{id}": {
+    "/tasks/{id}": {
       "delete": {
         "tags": ["Tasks"],
         "summary": "Delete task by ID",
@@ -972,9 +966,7 @@
             }
           }
         }
-      }
-    },
-    "/api/tasks/id": {
+      },
       "patch": {
         "tags": ["Tasks"],
         "summary": "Update task by ID",
@@ -1010,7 +1002,7 @@
         }
       }
     },
-    "/api/tasks/:id/replace": {
+    "/tasks/{id}/replace": {
       "post": {
         "tags": ["Tasks"],
         "summary": "Replace task to another column by task's ID",
@@ -1215,10 +1207,34 @@
       "RequestID": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "Serhii Shevchenko"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "sergeysheva@mail.com"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "Logo user",
+            "example": ""
+          },
+          "boards": {
+            "type": "string",
+            "description": "Boards user",
+            "example": "7 boards"
+          },
+          "theme": {
+            "type": "string",
+            "description": "Theme user",
+            "example": "dark"
+          },
           "id": {
             "type": "string",
-            "description": "Id",
-            "example": "684gvrgb4b4ty18h4ty8h"
+            "example": "b46gf4b68n4"
           }
         }
       },
@@ -1229,30 +1245,31 @@
             "type": "object",
             "properties": {
               "name": {
-                "type": "string",
-                "example": "John Wick"
-              },
-              "email": {
-                "type": "string",
-                "example": "johnWick@gmail.com"
-              },
-              "avatarURL": {
-                "type": "string",
-                "example": ""
-              },
-              "boards": {
-                "type": "string",
-                "example": "7 boards"
-              },
-              "theme": {
-                "type": "string",
-                "example": "dark"
-              }
-            }
-          },
-          "id": {
             "type": "string",
-            "example": "b46gf4b68n4"
+            "description": "User name",
+            "example": "Serhii Shevchenko"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "sergeysheva@mail.com"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "Logo user",
+            "example": ""
+          },
+          "boards": {
+            "type": "string",
+            "description": "Boards user",
+            "example": "7 boards"
+          },
+          "theme": {
+            "type": "string",
+            "description": "Theme user",
+            "example": "dark"
+          }
+            }
           }
         }
       },

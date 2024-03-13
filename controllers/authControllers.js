@@ -98,9 +98,14 @@ export const updateUser = catchAsync(async (req, res) => {
   const { _id } = req.user;
  
   const updatedUser = await updateUserProfile(_id, req.body, req.file);
-
+  
   res.json({
     message: "Profile updated",
-    user: updatedUser,
+    user: {
+      name: updatedUser.name,
+      email: updatedUser.email,
+      theme: updatedUser.theme,
+      avatarURL: updatedUser.avatarURL
+    },
   });
 });

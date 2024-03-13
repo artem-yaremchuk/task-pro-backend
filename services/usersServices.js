@@ -76,6 +76,7 @@ export const updateUserProfile = async (userId, reqBody, file) => {
   }
 
   let avatarURL;
+  
   if (file) {
     const uploadedImage = await cloudinary.uploader.upload(file.path, {
       allowed_formats: ["jpg", "png"],
